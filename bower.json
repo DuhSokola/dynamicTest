@@ -1,0 +1,21 @@
+{
+  "name": "dynSearch",
+  "version": "0.0.1",
+  "dependencies": {
+    "angular": "~1.4.7",
+    "angular-resource": "~1.4.7",
+    "angular-sanitize": "~1.4.7",
+    "bootstrap": "~3.3.4",
+    "jquery": "~2.1.4",
+    "underscore": "~1.8.3"
+  },
+  "overrides": {
+    "bootstrap": {
+      "main": [
+        "less/bootstrap.less",
+        "dist/css/bootstrap.css",
+        "dist/js/bootstrap.js"
+      ]
+    }
+  }
+}

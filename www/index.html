@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html ng-app="hostApp">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>dynamicTest</title>
+
+    <!-- bower:css -->
+    <link rel="stylesheet" href="lib/bower_components/bootstrap/dist/css/bootstrap.css" />
+    <!-- endbower -->
+
+    <!-- inject:css -->
+    <link rel="stylesheet" href="/externals/bower_components/angular/angular-csp.css">
+    <link rel="stylesheet" href="/externals/bower_components/bootstrap/dist/css/bootstrap-theme.css">
+    <link rel="stylesheet" href="/externals/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/externals/bower_components/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="/externals/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <!-- endinject -->
+
+</head>
+<body>
+
+<div class="container" id="container" style="margin-top:20px;" ng-controller="hostAppCtrl">
+
+    <form amag-form id="someForm" amag-table-default="client">
+        <div class="row">
+            <label for="name" name="name_label">Name: </label>
+            <input id="name" type="text" amag-form-field="surname" amag-form-validation-rule="surname" amag-form-table="tbl_surname">
+        </div>
+        <br>
+       <div class="row">
+            Pass:
+            <input type="password" amag-form-field="password" amag-form-validation-rule="forename">
+        </div>
+
+        <br>
+        <div class="row">
+            <label for="email" name="name_label">Email: </label>
+            <input id="email" type="email" amag-form-field="email">
+        </div>
+        <br>
+        <div class="row">
+            Checkboxes
+            <input type="checkbox" amag-form-field="checkbox">
+        </div>
+        <br>
+        <div class="row">
+            Farbe
+            <input type="color" amag-form-field="color">
+        </div>
+        <br>
+        <div class="row">
+            Date
+            <input type="date" amag-form-field="date">
+        </div>
+        <br>
+        <div class="row">
+            Datetime
+            <input type="datetime-local" amag-form-field="datetimelocal">
+        </div>
+        <br>
+        <div class="row">
+            Monat
+            <input type="month" amag-form-field="month">
+        </div>
+        <br>
+        <div class="row">
+            Number
+            <input type="number" amag-form-field="number">
+        </div>
+        <br>
+        <div class="row">
+            Submit
+            <input type="submit">
+        </div>
+
+        <br>
+        <div class="row">
+            Radios
+            <input name="radio" type="radio" amag-form-field="radio" value="ok">
+            <input name="radio" type="radio" amag-form-field="radio" value="nok">
+        </div>
+
+        <!--
+        <br>
+        <div class="row">
+            Range
+            <input type="range" style="width:200px" amag-form-field>
+        </div>
+        <br>
+        <div class="row">
+            Zeit
+            <input type="time" amag-form-field>
+        </div>
+        <br>
+        <div class="row">
+            Woche
+            <input type="week" amag-form-field>
+        </div>
+-->
+    </form>
+
+
+</div>
+<!-- build:js scripts/combined.js -->
+<!-- bower:js -->
+<script src="lib/bower_components/jquery/dist/jquery.js"></script>
+<script src="lib/bower_components/angular/angular.js"></script>
+<script src="lib/bower_components/angular-resource/angular-resource.js"></script>
+<script src="lib/bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="lib/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<script src="lib/bower_components/underscore/underscore.js"></script>
+<!-- endbower -->
+
+<!-- inject:js -->
+<script src="/js/app.js"></script>
+<script src="/js/modul/amag-form.js"></script>
+<!-- endinject -->
+<!-- endbuild -->
+</body>
+</html>

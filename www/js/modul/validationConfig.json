@@ -1,0 +1,59 @@
+{
+  "defaultValidationRules":[
+    {
+      "id":"forename",
+      "rule":{
+        "max": 4,
+        "min": 0,
+        "required": true
+      }
+    },
+    {
+      "id":"surname",
+      "rule":{
+        "max": 4,
+        "min": 0,
+        "required": true
+      }
+    },
+    {
+      "id":"email",
+      "rule":{
+        "pattern":true,
+        "max": 150,
+        "min": 0,
+        "required": true
+      }
+    },
+    {
+      "id":"zip",
+      "rule":{
+        "pattern":"^[0-9]*$",
+        "max": 4,
+        "min": 4,
+        "required": true
+      }
+    },
+    {
+      "id":"textarea",
+      "rule":{
+        "max": 3000,
+        "min": 0,
+        "required": false
+      }
+    },
+    {
+      "id":"radio",
+      "rule":{
+        "required": true
+      }
+    },
+    {
+      "id":"checkbox",
+      "rule":{
+        "required": false
+      }
+    }
+  ],
+  "_possible_rules":"patter, max, min, required"
+}
