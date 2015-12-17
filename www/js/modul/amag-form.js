@@ -163,32 +163,55 @@
         return {
             restrict: 'A',
             link: function (scope, element, attrs) {
-                attrs.$set('novalidate', 'novalidate');
+                attrs.$set('novalidate', 'true');
 
-                scope.data = {};
-                var form = element;
+                var data = {};
+                var form = element;//simple rename
                 var inputs = $('[amag-form-field]');
+                var checkboxes = $('[amag-form-field]');
                 var table_default = form.attr('amag-table-default');
                 form.on('submit', function () {
                     for (var i = 0; i < inputs.length; i++) {
+                        var field_value = '';
                         var field_name = $(inputs[i]).attr('amag-form-field');
                         var field_validation_rule_id = $(inputs[i]).attr('amag-form-validation-rule') || '';
-
-                        var field_value = $(inputs[i]).val();
                         var table = $(inputs[i]).attr('amag-form-table') || table_default;
 
-                        var key = $parse(field_name);
-                        key.assign(scope.data, {
-                            field_name: field_name.toString(),
-                            field_value: field_value.toString(),
-                            table: table.toString(),
-                            validation_rule_id: field_validation_rule_id.toString() || ''
-                        });
-                        scope.$apply();
+                        if ($(inputs[i]).attr('type') == 'radio' && !$(inputs[i]).prop("checked")) {
+                            //Jump over unchecked radios
+                            continue;
+                        } else if ($(inputs[i]).attr('type') == 'checkbox') {
+                            if ($(inputs[i - 1]).attr('type') != 'checkbox') {
+                                data[field_name] = {};
+                            }
+                            if ($(inputs[i]).prop("checked")) {
+                                field_value = $(inputs[i]).val();
+                                var checkboxName = $(inputs[i]).attr('amag-form-checkbox');
+                                data[field_name][checkboxName] = {
+                                    checkbox_group: field_name.toString(),
+                                    checkbox_name: checkboxName.toString(),
+                                    checkbox_value: field_value.toString(),
+                                    table: table.toString(),
+                                    validation_rule_id: field_validation_rule_id.toString() || ''
+                                };
+                            } else {
+                                //Jump over unchecked checkboxes
+                                continue;
+                            }
+                        } else {
+                            //Everything else and radios
+                            field_value = $(inputs[i]).val();
+                            data[field_name] = {
+                                field_name: field_name.toString(),
+                                field_value: field_value.toString(),
+                                table: table.toString(),
+                                validation_rule_id: field_validation_rule_id.toString() || ''
+                            };
+                        }
                     }
 
-                    if (amagFormValidationService.validate(scope.data)) {
-                        amagFormPersistenceService.persist(scope.data);
+                    if (amagFormValidationService.validate(data)) {
+                        amagFormPersistenceService.persist(data);
                     }
                 });
 

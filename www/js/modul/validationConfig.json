@@ -3,17 +3,17 @@
     {
       "id":"forename",
       "rule":{
-        "max": 4,
+        "max": 10,
         "min": 0,
-        "required": true
+        "required": false
       }
     },
     {
       "id":"surname",
       "rule":{
-        "max": 4,
+        "max": 10,
         "min": 0,
-        "required": true
+        "required": false
       }
     },
     {
@@ -51,7 +51,7 @@
     {
       "id":"checkbox",
       "rule":{
-        "required": false
+        "required": true
       }
     }
   ],
