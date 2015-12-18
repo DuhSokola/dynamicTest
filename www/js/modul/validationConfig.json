@@ -45,7 +45,7 @@
     {
       "id":"radio",
       "rule":{
-        "required": true
+        "required": false
       }
     },
     {

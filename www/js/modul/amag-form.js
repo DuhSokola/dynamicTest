@@ -77,9 +77,15 @@
             var errorList = [];
 
             for (var item in data) {
+
                 var rule = getValidationRulesById(data[item].validation_rule_id);
+
+                if (data[item][Object.keys(data[item])[0]].field_type == 'checkbox') {
+                    rule = getValidationRulesById(data[item][Object.keys(data[item])[0]].validation_rule_id);
+                }
+
                 if (rule && rule != '') {
-                    if (rule.max.toString() && rule.max.toString() != '') {
+                    if (rule.max && rule.max != '') {
                         if (data[item].field_value.length > rule.max) {
                             errorList.push({
                                 field_name: item,
@@ -89,8 +95,7 @@
                             });
                         }
                     }
-
-                    if (rule.min.toString() && rule.min.toString() != '') {
+                    if (rule.min && rule.min != '') {
                         if (data[item].field_value.length < rule.min) {
                             errorList.push({
                                 field_name: item,
@@ -101,7 +106,23 @@
                         }
                     }
                     if (rule.required) {
-                        if (!data[item].field_value || !/\S/.test(data[item].field_value)) {
+                        //first field must have validation attr
+                        if (data[item][Object.keys(data[item])[0]].field_type == 'checkbox') {
+                            var isValid = false;
+                            for (var checkbox in data[item]) {
+                                if (data[item][checkbox].field_value) {
+                                    isValid = true;
+                                }
+                            }
+                            if (!isValid) {
+                                errorList.push({
+                                    field_name: item,
+                                    field_value: data[item][checkbox].field_value,
+                                    rule: {required: rule.required},
+                                    description: 'value is required'
+                                });
+                            }
+                        } else if (!data[item].field_value || !/\S/.test(data[item].field_value)) {
                             errorList.push({
                                 field_name: item,
                                 field_value: data[item].field_value,
@@ -164,50 +185,79 @@
             restrict: 'A',
             link: function (scope, element, attrs) {
                 attrs.$set('novalidate', 'true');
-
                 var data = {};
                 var form = element;//simple rename
-                var inputs = $('[amag-form-field]');
-                var checkboxes = $('[amag-form-field]');
-                var table_default = form.attr('amag-table-default');
+                var table_default = form.attr('amag-form-table-default');
                 form.on('submit', function () {
+                    var inputs = $('[amag-form-field]');
+
                     for (var i = 0; i < inputs.length; i++) {
                         var field_value = '';
                         var field_name = $(inputs[i]).attr('amag-form-field');
                         var field_validation_rule_id = $(inputs[i]).attr('amag-form-validation-rule') || '';
-                        var table = $(inputs[i]).attr('amag-form-table') || table_default;
+                        var table = $(inputs[i]).attr('amag-form-field-table') || table_default;
 
-                        if ($(inputs[i]).attr('type') == 'radio' && !$(inputs[i]).prop("checked")) {
-                            //Jump over unchecked radios
-                            continue;
-                        } else if ($(inputs[i]).attr('type') == 'checkbox') {
-                            if ($(inputs[i - 1]).attr('type') != 'checkbox') {
-                                data[field_name] = {};
-                            }
-                            if ($(inputs[i]).prop("checked")) {
-                                field_value = $(inputs[i]).val();
-                                var checkboxName = $(inputs[i]).attr('amag-form-checkbox');
-                                data[field_name][checkboxName] = {
-                                    checkbox_group: field_name.toString(),
-                                    checkbox_name: checkboxName.toString(),
-                                    checkbox_value: field_value.toString(),
-                                    table: table.toString(),
-                                    validation_rule_id: field_validation_rule_id.toString() || ''
-                                };
-                            } else {
-                                //Jump over unchecked checkboxes
-                                continue;
-                            }
-                        } else {
-                            //Everything else and radios
-                            field_value = $(inputs[i]).val();
-                            data[field_name] = {
-                                field_name: field_name.toString(),
-                                field_value: field_value.toString(),
+                        field_value = $(inputs[i]).val();
+                        data[field_name] = {
+                            field_name: field_name.toString(),
+                            field_value: field_value.toString(),
+                            table: table.toString(),
+                            validation_rule_id: field_validation_rule_id.toString() || ''
+                        };
+                    }
+
+                    var checkboxes = $('[amag-form-checkbox-group]');
+
+                    var checkboxGroups = [];
+                    for (var i = 0; i < checkboxes.length; i++) {
+                        checkboxGroups.push($(checkboxes[i]).attr('amag-form-checkbox-group'));
+                    }
+                    $.unique(checkboxGroups);
+
+                    for (var i = 0; i < checkboxGroups.length; i++) {
+                        var query = '[amag-form-checkbox-group=' + checkboxGroups[i] + ']';
+                        var checkboxesOfGroup = $(query);
+
+                        data[checkboxGroups[i]] = {};
+
+                        checkboxesOfGroup.each(function (index, element) {
+                            var checkboxName = $(element).attr('amag-form-checkbox-name');
+                            var checkboxValue = $(element).prop('checked');
+                            var table = $(element).attr('amag-form-field-table') || table_default;
+                            var validation_rule_id = $(element).attr('amag-form-validation-rule') || '';
+
+                            data[checkboxGroups[i]][checkboxName] = {
+                                field_type: 'checkbox',
+                                field_name: checkboxName.toString(),
+                                field_value: checkboxValue.toString(),
                                 table: table.toString(),
-                                validation_rule_id: field_validation_rule_id.toString() || ''
+                                validation_rule_id: validation_rule_id.toString() || ''
                             };
-                        }
+                        });
+                    }
+
+                    var radios = $.unique($('[amag-form-radio-group]'));
+                    var radioGroups = [];
+
+                    for (var i = 0; i < radios.length; i++) {
+                        radioGroups.push($(radios[i]).attr('amag-form-radio-group'));
+                    }
+
+                    $.unique(radioGroups);
+
+                    for (var i = 0; i < radioGroups.length; i++) {
+                        var query = '[amag-form-radio-group=' + radioGroups[i] + ']:checked';
+                        var radioGroupValue = $(query).val() || '';
+                        var table = $('[amag-form-radio-group=' + radioGroups[i] + ']').attr('amag-form-field-table') || table_default;
+                        var validation_rule_id = $('[amag-form-radio-group=' + radioGroups[i] + ']').attr('amag-form-validation-rule') || '';
+
+                        data[radioGroups[i]] = {
+                            field_type: 'radio',
+                            field_name: radioGroups[i].toString(),
+                            field_value: radioGroupValue.toString(),
+                            table: table.toString(),
+                            validation_rule_id: validation_rule_id.toString() || ''
+                        };
                     }
 
                     if (amagFormValidationService.validate(data)) {

@@ -22,7 +22,7 @@
 
 <div class="container" id="container" style="margin-top:20px;" ng-controller="hostAppCtrl">
 
-    <form amag-form id="someForm" amag-table-default="client">
+    <form amag-form id="someForm" amag-form-table-default="client">
         <div class="row">
             <label for="name" name="name_label">Name: </label>
             <input id="name" type="text" amag-form-field="surname" amag-form-validation-rule="surname" amag-form-table="tbl_surname">
@@ -41,15 +41,15 @@
         <br>
         <div class="row">
             Radios
-            <input name="radio" type="radio" amag-form-field="radio" value="ok">
-            <input name="radio" type="radio" amag-form-field="radio" value="nok">
+            <input name="radio1" type="radio" amag-form-radio-group="radioG1" amag-form-validation-rule="radio" value="ok">
+            <input name="radio1" type="radio" amag-form-radio-group="radioG1" amag-form-validation-rule="radio" value="nok">
         </div>
         <br>
         <div class="row">
             Checkboxes
-            <input type="checkbox" amag-form-field="checkbox" amag-form-checkbox="chkboxName1">
-            <input type="checkbox" amag-form-field="checkbox" amag-form-checkbox="chkboxName2">
-            <input type="checkbox" amag-form-field="checkbox" amag-form-checkbox="chkboxName3">
+            <input type="checkbox" amag-form-checkbox-group="checkboxG1" amag-form-checkbox-name="chkboxName1" amag-form-validation-rule="checkbox">
+            <input type="checkbox" amag-form-checkbox-group="checkboxG1" amag-form-checkbox-name="chkboxName2" amag-form-validation-rule="checkbox">
+            <input type="checkbox" amag-form-checkbox-group="checkboxG1" amag-form-checkbox-name="chkboxName3" amag-form-validation-rule="checkbox">
         </div>
         <br>
         <div class="row">
